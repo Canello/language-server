@@ -11,7 +11,7 @@ exports.transcription = async (req, res, next) => {
 
     const transcription = await OpenAI.transcript(filename, file);
 
-    fs.unlink(path.join(__dirname, "..", "uploads", filename), (err) => {
+    fs.unlink(filePath, (err) => {
         if (err) console.log(err);
     });
 
