@@ -9,7 +9,15 @@ const userSchema = new mongoose.Schema(
         isActive: { type: Boolean, default: false },
         expirationDate: { type: Date, default: Date.now },
     },
-    { timestamps: true }
+    {
+        timestamps: true,
+        toJSON: {
+            transform(doc, ret) {
+                delete ret.password;
+                delete ret.__v;
+            },
+        },
+    }
 );
 
 const User = mongoose.model("User", userSchema);
