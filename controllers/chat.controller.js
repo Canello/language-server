@@ -1,5 +1,5 @@
-const { SYSTEM_PROMPT } = require("../data/prompts.data");
-const OpenAI = require("../models/OpenAI.model");
+const { SYSTEM_PROMPT } = require("../utils/constants");
+const OpenAI = require("../models/openai.model");
 
 exports.chat = async (req, res, next) => {
     const { messages } = req.body;

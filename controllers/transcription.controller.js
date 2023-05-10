@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const OpenAI = require("../models/OpenAI.model");
+const OpenAI = require("../models/openai.model");
 
 exports.transcription = async (req, res, next) => {
     const { filename } = req.file;
