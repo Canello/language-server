@@ -4,7 +4,7 @@ class OpenAI {
     static async transcript(filename, file) {
         const formData = new FormData();
         formData.append("file", new Blob([file]), filename);
-        formData.append("model", "whisper-1");
+        formData.append("model", process.env.TRANSCRIPTION_MODEL);
 
         const response = await axios.post(
             "https://api.openai.com/v1/audio/transcriptions",
@@ -25,7 +25,7 @@ class OpenAI {
         const response = await axios.post(
             "https://api.openai.com/v1/chat/completions",
             {
-                model: "gpt-3.5-turbo",
+                model: process.env.CHAT_MODEL,
                 messages,
             },
             {
@@ -36,9 +36,15 @@ class OpenAI {
             }
         );
         const reply = response.data.choices[0].message.content;
-        const tokensUsed = response.data.usage.total_tokens;
+        const { prompt_tokens, completion_tokens, total_tokens } =
+            response.data.usage;
 
-        return { reply, tokensUsed };
+        return {
+            reply,
+            promptTokens: prompt_tokens,
+            completionTokens: completion_tokens,
+            totalTokens: total_tokens,
+        };
     }
 }
 

@@ -15,14 +15,17 @@ const {
     getUser,
 } = require("./controllers/auth.controller");
 const { auth } = require("./middlewares/auth.middleware");
+const {
+    checkSubscription,
+} = require("./middlewares/check-subscription.middleware");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.post("/transcription", uploadAudio, transcription);
-app.post("/chat", chat);
+app.post("/transcription", auth, checkSubscription, uploadAudio, transcription);
+app.post("/chat", auth, checkSubscription, chat);
 app.post("/auth/google", loginWithGoogle);
 app.post("/auth/signin", signin);
 app.post("/auth/signup", signup);

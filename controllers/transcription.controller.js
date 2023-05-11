@@ -1,17 +1,36 @@
 const fs = require("fs");
 const path = require("path");
+const { getAudioDurationInSeconds } = require("get-audio-duration");
 
 const OpenAI = require("../models/openai.model");
+const Usage = require("../models/usage.model");
 
 exports.transcription = async (req, res, next) => {
+    const { userId } = req.headers;
     const { filename } = req.file;
 
-    const filePath = path.join(__dirname, "..", "uploads", filename);
-    const file = fs.readFileSync(filePath);
+    const filepath = path.join(__dirname, "..", "uploads", filename);
 
+    // Evitar áudios com mais de 5min
+    const duration = await getAudioDurationInSeconds(filepath);
+    if (duration > 300)
+        throw new Error("O áudio deve ser menor que 5 minutos.");
+
+    // Trackear uso por duração do áudio
+    const usage = new Usage({
+        userId,
+        type: "transcription",
+        model: process.env.TRANSCRIPTION_MODEL,
+        durationInSeconds: duration,
+    });
+    usage.save();
+
+    // Transcription
+    const file = fs.readFileSync(filepath);
     const transcription = await OpenAI.transcript(filename, file);
 
-    fs.unlink(filePath, (err) => {
+    // Excluir audio file temporária
+    fs.unlink(filepath, (err) => {
         if (err) console.log(err);
     });
 
