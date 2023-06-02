@@ -27,7 +27,7 @@ app.use(express.json());
 
 app.post("/transcription", auth, checkSubscription, uploadAudio, transcription);
 app.post("/chat", auth, checkSubscription, chat);
-app.post("/auth/google", loginWithGoogle);
+// app.post("/auth/google", loginWithGoogle);
 app.post("/auth/signin", signin);
 app.post("/auth/signup", signup);
 app.get("/auth/user", auth, getUser);
