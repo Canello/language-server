@@ -8,7 +8,7 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     console.log("https://api.mercadopago.com/v1/payments/" + id);
 
     const payment = await axios.get(
-        "https://api.mercadopago.com/v1/payments/" + id,
+        `https://api.mercadopago.com/v1/payments/${id}?access_token=${process.env.MERCADO_PAGO_ACCESS_TOKEN}`,
         {
             headers: {
                 "Content-Type": "application/json",
