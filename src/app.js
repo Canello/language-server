@@ -18,7 +18,10 @@ const { auth } = require("./middlewares/auth.middleware");
 const {
     checkSubscription,
 } = require("./middlewares/check-subscription.middleware");
-const { mercadopagoWebhook } = require("./controllers/mercado-pago.controller");
+const {
+    mercadopagoWebhook,
+    createPreference,
+} = require("./controllers/mercado-pago.controller");
 
 const app = express();
 
@@ -31,7 +34,8 @@ app.post("/chat", auth, checkSubscription, chat);
 app.post("/auth/signin", signin);
 app.post("/auth/signup", signup);
 app.get("/auth/user", auth, getUser);
-app.post("/webhooks/mercado-pago", mercadopagoWebhook);
+app.post("/mercado-pago/preferences", auth, createPreference);
+app.post("/mercado-pago/webhooks", mercadopagoWebhook);
 
 app.use(errorHandler);
 
