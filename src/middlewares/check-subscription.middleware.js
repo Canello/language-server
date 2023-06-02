@@ -1,4 +1,4 @@
-const User = require("../models/User.model");
+const User = require("../models/user.model");
 
 exports.checkSubscription = async (req, res, next) => {
     const { userId } = req.headers;
