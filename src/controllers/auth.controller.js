@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const User = require("../models/User.model");
+const User = require("../models/user.model");
 
 exports.loginWithGoogle = async (req, res, next) => {
     const { googleToken } = req.body;
