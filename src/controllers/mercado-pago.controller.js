@@ -4,7 +4,7 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     const { id } = req.body.data;
 
     const response = await axios.get(
-        `https://api.mercadopago.com/v1/payments/${id}s`,
+        `https://api.mercadopago.com/v1/payments/${id}`,
         {
             headers: {
                 "Content-Type": "application/json",
