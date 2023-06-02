@@ -4,6 +4,7 @@ const path = require("path");
 exports.errorHandler = (err, req, res, next) => {
     console.log(err);
 
+    // Garantir exclusão de audio file temporária mesmo se der erro
     const audioFile = req.file;
     if (audioFile) {
         fs.unlink(

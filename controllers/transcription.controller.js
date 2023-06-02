@@ -12,18 +12,18 @@ exports.transcription = async (req, res, next) => {
     const filepath = path.join(__dirname, "..", "uploads", filename);
 
     // Evitar áudios com mais de 5min
-    const duration = await getAudioDurationInSeconds(filepath);
-    if (duration > 300)
-        throw new Error("O áudio deve ser menor que 5 minutos.");
+    // const durationInSeconds = await getAudioDurationInSeconds(filepath);
+    // if (durationInSeconds > 300)
+    //     throw new Error("O áudio deve ser menor que 5 minutos.");
 
     // Trackear uso por duração do áudio
-    const usage = new Usage({
-        userId,
-        type: "transcription",
-        model: process.env.TRANSCRIPTION_MODEL,
-        durationInSeconds: duration,
-    });
-    usage.save();
+    // const usage = new Usage({
+    //     userId,
+    //     type: "transcription",
+    //     model: process.env.TRANSCRIPTION_MODEL,
+    //     durationInSeconds,
+    // });
+    // usage.save();
 
     // Transcription
     const file = fs.readFileSync(filepath);
