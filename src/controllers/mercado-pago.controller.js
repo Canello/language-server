@@ -29,13 +29,6 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     // Check if user is already active
     // If he is, give the money back
 
-    console.log(
-        "will give access ",
-        +(
-            payment.status === "approved" &&
-            payment.status_detail === "accredited"
-        )
-    );
     if (
         payment.status === "approved" &&
         payment.status_detail === "accredited"
@@ -44,6 +37,7 @@ exports.mercadopagoWebhook = async (req, res, next) => {
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 1);
         console.log("wiil set expiration date " + expirationDate);
+        console.log("for user with id", payment.metadata._id);
         User.updateOne({ _id: payment.metadata.user_id }, { expirationDate });
     }
 
