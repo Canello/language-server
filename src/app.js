@@ -35,7 +35,7 @@ app.post("/auth/signin", signin);
 app.post("/auth/signup", signup);
 app.get("/auth/user", auth, getUser);
 app.post("/mercado-pago/preferences", auth, createPreference);
-app.post("/mercado-pago/webhook", mercadopagoWebhook);
+app.post("/mercado-pago/webhooks", mercadopagoWebhook);
 
 app.use(errorHandler);
 
