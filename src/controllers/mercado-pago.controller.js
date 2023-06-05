@@ -40,10 +40,10 @@ exports.mercadopagoWebhook = async (req, res, next) => {
         payment.status === "approved" &&
         payment.status_detail === "accredited"
     ) {
-        console.log("heeere");
         // Give 1 month access for user
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 1);
+        console.log("wiil set expiration date " + expirationDate);
         User.updateOne({ _id: payment.metadata.user_id }, { expirationDate });
     }
 
