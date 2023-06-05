@@ -9,7 +9,7 @@ mercadopago.configure({
 // enviar link da preferência para o front-end
 // receber webhook com user_id
 
-exports.createPreference = async () => {
+exports.createPreference = async (req, res, next) => {
     const { userId } = req.headers;
 
     const preference = {
