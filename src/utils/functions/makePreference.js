@@ -26,7 +26,9 @@ exports.makePreference = (userId) => {
             user_id: userId,
         },
         binary_mode: true,
-        excluded_payment_types: ["ticket"],
+        payment_methods: {
+            excluded_payment_types: ["ticket"],
+        },
         expires: true,
         expiration_date_from: now,
         expiration_date_to: expiresAt,
