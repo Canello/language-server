@@ -12,8 +12,6 @@ exports.createPreference = async (req, res, next) => {
 
     const preference = makePreference(userId);
     const createdPreference = await MercadoPago.createPreference(preference);
-    console.log("createdPreference:");
-    console.log(createdPreference);
 
     res.status(201).send({
         status: "ok",
@@ -27,16 +25,22 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     // Get payment by id
     const { id } = req.body.data;
     const payment = await MercadoPago.getPayment(id);
-    console.log("payment:");
-    console.log(payment);
 
     // Check if user is already active
     // If he is, give the money back
 
+    console.log(
+        "will give access ",
+        +(
+            payment.status === "approved" &&
+            payment.status_detail === "accredited"
+        )
+    );
     if (
         payment.status === "approved" &&
         payment.status_detail === "accredited"
     ) {
+        console.log("heeere");
         // Give 1 month access for user
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 1);
