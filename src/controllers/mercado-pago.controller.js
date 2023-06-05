@@ -57,6 +57,8 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     );
     const payment = response.data;
 
+    console.log(payment);
+
     if (
         payment.status === "approved" &&
         payment.status_detail === "accredited"
