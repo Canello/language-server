@@ -25,6 +25,7 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     // Get payment by id
     const { id } = req.body.data;
     const payment = await MercadoPago.getPayment(id);
+    console.log(payment);
 
     // Check if user is already active
     // If he is, give the money back
