@@ -1,5 +1,6 @@
 const axios = require("axios");
 const mercadopago = require("mercadopago");
+const User = require("../models/user.model");
 
 mercadopago.configure({
     access_token: process.env.MERCADO_PAGO_ACCESS_TOKEN,
@@ -43,8 +44,10 @@ exports.createPreference = async (req, res, next) => {
 };
 
 exports.mercadopagoWebhook = async (req, res, next) => {
+    // Payment id
     const { id } = req.body.data;
 
+    // Get payment
     const response = await axios.get(
         `https://api.mercadopago.com/v1/payments/${id}`,
         {
@@ -57,12 +60,17 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     );
     const payment = response.data;
 
-    console.log(payment);
+    // Check if user is already active
+    // If he is, give the money back
 
     if (
         payment.status === "approved" &&
         payment.status_detail === "accredited"
     ) {
+        // Set 1 month access for user
+        const expirationDate = new Date();
+        expirationDate.setMonth(expirationDate.getMonth() + 1);
+        User.updateOne({ _id: payment.metadata.user_id }, { expirationDate });
     }
 
     res.status(200).send("ok");

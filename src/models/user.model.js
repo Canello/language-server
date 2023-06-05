@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
     {
-        fullName: String,
-        email: String,
-        password: String,
+        fullName: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
+        password: { type: String, required: true },
         freeTrials: { type: Number, default: 7 },
-        isActive: { type: Boolean, default: false },
         expirationDate: { type: Date, default: Date.now },
     },
     {
         timestamps: true,
         toJSON: {
             transform(doc, ret) {
+                ret.isActive = new Date(ret.expirationDate) > new Date();
                 delete ret.password;
                 delete ret.__v;
             },

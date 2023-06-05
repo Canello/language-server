@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const usageSchema = new mongoose.Schema(
     {
-        userId: String,
-        type: String,
-        model: String,
+        userId: { type: String, required: true },
+        type: { type: String, required: true },
+        model: { type: String, required: true },
         promptTokens: { type: Number, required: false },
         completionTokens: { type: Number, required: false },
         totalTokens: { type: Number, required: false },
