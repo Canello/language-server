@@ -38,7 +38,7 @@ exports.mercadopagoWebhook = async (req, res, next) => {
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 1);
         console.log("wiil set expiration date " + expirationDate);
-        console.log("for user with id", payment.metadata._id);
+        console.log("for user with id", payment.metadata.user_id);
         User.updateOne({ _id: payment.metadata.user_id }, { expirationDate });
     }
 
