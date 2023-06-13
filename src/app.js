@@ -13,6 +13,8 @@ const {
     signin,
     signup,
     getUser,
+    getPasswordResetLink,
+    changePassword,
 } = require("./controllers/auth.controller");
 const { auth } = require("./middlewares/auth.middleware");
 const {
@@ -34,6 +36,8 @@ app.post("/chat", auth, checkSubscription, chat);
 app.post("/auth/signin", signin);
 app.post("/auth/signup", signup);
 app.get("/auth/user", auth, getUser);
+app.post("/auth/reset-link", getPasswordResetLink);
+app.post("/auth/change-password", changePassword);
 app.post("/mercado-pago/preferences", auth, createPreference);
 app.post("/mercado-pago/webhooks", mercadopagoWebhook);
 

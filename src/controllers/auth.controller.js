@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/user.model");
+const { sendEmail } = require("../utils/functions/sendEmail");
 
 exports.loginWithGoogle = async (req, res, next) => {
     const { googleToken } = req.body;
@@ -91,5 +92,53 @@ exports.getUser = async (req, res, next) => {
 
     res.send({
         data: { user },
+    });
+};
+
+exports.getPasswordResetLink = async (req, res, next) => {
+    const { email } = req.body;
+
+    // Check if there is a user with provided email
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("Esse email não pertence a nenhum usuário.");
+
+    // Create new reset token
+    const resetToken = jwt.sign(
+        { email },
+        process.env.RESET_PASSWORD_JWT_SECRET,
+        { expiresIn: 20 * 60 } // Expires after 20 minutes
+    );
+
+    // Create reset link
+    const resetLink =
+        process.env.CLIENT_ADDRESS + "/reset-password/" + resetToken;
+
+    // Send to email
+    sendEmail({ to: email, url: resetLink });
+
+    res.status(200).send({
+        status: "ok",
+        data: {
+            link: resetLink,
+        },
+    });
+};
+
+exports.changePassword = async (req, res, next) => {
+    const { newPassword, token } = req.body;
+
+    // Validate jwt and extract email
+    const decodedToken = jwt.verify(
+        token,
+        process.env.RESET_PASSWORD_JWT_SECRET
+    );
+    const { email } = decodedToken;
+
+    // Update password for user with this email
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    await User.updateOne({ email }, { password: hashedPassword });
+
+    res.status(200).send({
+        status: "ok",
     });
 };
