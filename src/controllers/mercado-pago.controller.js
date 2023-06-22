@@ -22,18 +22,18 @@ exports.createPreference = async (req, res, next) => {
 };
 
 exports.mercadopagoWebhook = async (req, res, next) => {
-    // Get payment by id
+    // Buscar o pagamento
     const { id } = req.body.data;
     const payment = await MercadoPago.getPayment(id);
 
-    // Check if user is already active
-    // If he is, give the money back
+    // Se o usuário já estiver com conta ativa, reembolsá-lo
+    console.log(payment.metadata);
 
     if (
         payment.status === "approved" &&
         payment.status_detail === "accredited"
     ) {
-        // Give 1 month access for user
+        // Liberar 1 mês de acesso para o usuário
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 1);
         await User.updateOne(
@@ -42,5 +42,5 @@ exports.mercadopagoWebhook = async (req, res, next) => {
         );
     }
 
-    res.status(200).send("ok");
+    res.status(200).send({ status: "ok" });
 };
