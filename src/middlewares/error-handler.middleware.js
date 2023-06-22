@@ -15,9 +15,18 @@ exports.errorHandler = (err, req, res, next) => {
         );
     }
 
+    // Erro customizado
+    if (err.isCustom) {
+        return res.status(err.status).send({
+            error: err.toResponseError(),
+        });
+    }
+
+    // Default para erros não customizados ou não previstos
     res.status(400).send({
         error: {
-            message: "Something went wrong",
+            type: "default",
+            message: "Alguma coisa deu errado.",
         },
     });
 };

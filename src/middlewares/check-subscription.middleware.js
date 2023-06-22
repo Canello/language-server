@@ -1,3 +1,4 @@
+const { NoCreditsError } = require("../errors/NoCreditsError.error");
 const User = require("../models/user.model");
 
 exports.checkSubscription = async (req, res, next) => {
@@ -8,7 +9,7 @@ exports.checkSubscription = async (req, res, next) => {
     if (user.freeTrials > 0) {
         await User.updateOne({ _id: userId }, { $inc: { freeTrials: -1 } }); // Reduzir créditos gratuitos em 1
     } else if (!user.isActive) {
-        throw new Error("Sem créditos.");
+        throw new NoCreditsError();
     }
 
     next();
