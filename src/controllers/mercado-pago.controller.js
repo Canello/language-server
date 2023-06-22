@@ -26,13 +26,16 @@ exports.mercadopagoWebhook = async (req, res, next) => {
     const { id } = req.body.data;
     const payment = await MercadoPago.getPayment(id);
 
-    // Se o usuário já estiver com conta ativa, reembolsá-lo
-    console.log(payment.metadata);
-
     if (
         payment.status === "approved" &&
         payment.status_detail === "accredited"
     ) {
+        const userId = payment.metadata.user_id;
+        const user = await User.findById(userId);
+
+        // Se o usuário já estiver com conta ativa, reembolsá-lo
+        if (user.isActive) await MercadoPago.refund(id);
+
         // Liberar 1 mês de acesso para o usuário
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 1);
