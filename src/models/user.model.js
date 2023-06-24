@@ -17,6 +17,13 @@ const userSchema = new mongoose.Schema(
                 delete ret.__v;
             },
         },
+        virtuals: {
+            isActive: {
+                get() {
+                    return new Date(this.expirationDate) > new Date();
+                },
+            },
+        },
     }
 );
 
