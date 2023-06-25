@@ -27,8 +27,8 @@ const {
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 app.post("/transcription", auth, checkSubscription, uploadAudio, transcription);
 app.post("/chat", auth, checkSubscription, chat);
