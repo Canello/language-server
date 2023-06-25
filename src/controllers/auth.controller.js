@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
 const User = require("../models/user.model");
 const { sendEmail } = require("../utils/functions/sendEmail");
+const { InvalidInputError } = require("../errors/InvalidInputError.error");
+const { ExpiredError } = require("../errors/ExpiredError.error");
 
 exports.loginWithGoogle = async (req, res, next) => {
     const { googleToken } = req.body;
@@ -38,19 +39,24 @@ exports.signup = async (req, res, next) => {
 
     // Validar inputs
     if (fullName.length < 1)
-        throw new Error("O nome deve ter no mínimo 1 caracter.");
+        throw new InvalidInputError("O nome deve ter no mínimo 1 caracter.");
     if (fullName.length > 100)
-        throw new Error("O nome deve ter no máximo 100 caracteres.");
-    if (email.length < 3) throw new Error("Email inválido.");
-    if (!email.includes("@")) throw new Error("Email inválido.");
+        throw new InvalidInputError(
+            "O nome deve ter no máximo 100 caracteres."
+        );
+    if (email.length < 3) throw new InvalidInputError("Email inválido.");
+    if (!email.includes("@")) throw new InvalidInputError("Email inválido.");
     if (password.length < 8)
-        throw new Error("A senha deve ter no mínimo 8 caracteres.");
+        throw new InvalidInputError("A senha deve ter no mínimo 8 caracteres.");
     if (password.length > 50)
-        throw new Error("A senha deve ter no máximo 50 caracteres.");
+        throw new InvalidInputError(
+            "A senha deve ter no máximo 50 caracteres."
+        );
 
     // Checar se já existe um usuário cadastrado com esse email
     const existingUser = await User.findOne({ email });
-    if (existingUser) throw new Error("Já existe um usuário com esse email.");
+    if (existingUser)
+        throw new InvalidInputError("Já existe um usuário com esse email.");
 
     // Criar novo usuário
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -70,11 +76,11 @@ exports.signin = async (req, res, next) => {
 
     // Buscar usuário
     const user = await User.findOne({ email });
-    if (!user) throw new Error("Usuário não encontrado.");
+    if (!user) throw new InvalidInputError("Usuário não encontrado.");
 
     // Validar senha
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) throw new Error("Senha incorreta.");
+    if (!passwordMatch) throw new InvalidInputError("Senha incorreta.");
 
     // Gerar JWT para autenticação de usuário
     const userToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
@@ -98,22 +104,22 @@ exports.getUser = async (req, res, next) => {
 exports.getPasswordResetLink = async (req, res, next) => {
     const { email } = req.body;
 
-    // Check if there is a user with provided email
+    // Checar se existe um usuário com o email fornecido
     const user = await User.findOne({ email });
     if (!user) throw new Error("Esse email não pertence a nenhum usuário.");
 
-    // Create new reset token
+    // Criar novo reset roken
     const resetToken = jwt.sign(
         { email },
         process.env.RESET_PASSWORD_JWT_SECRET,
-        { expiresIn: 20 * 60 } // Expires after 20 minutes
+        { expiresIn: 20 * 60 } // Expira depois de 20 minutos
     );
 
-    // Create reset link
+    // Criar link para reset
     const resetLink =
         process.env.CLIENT_ADDRESS + "/reset-password/" + resetToken;
 
-    // Send to email
+    // Enviar email
     sendEmail({ to: email, url: resetLink });
 
     res.status(200).send({
@@ -127,14 +133,26 @@ exports.getPasswordResetLink = async (req, res, next) => {
 exports.changePassword = async (req, res, next) => {
     const { newPassword, token } = req.body;
 
-    // Validate jwt and extract email
-    const decodedToken = jwt.verify(
-        token,
-        process.env.RESET_PASSWORD_JWT_SECRET
-    );
-    const { email } = decodedToken;
+    // Validar inputs
+    if (newPassword.length < 8)
+        throw new InvalidInputError("A senha deve ter no mínimo 8 caracteres.");
+    if (newPassword.length > 50)
+        throw new InvalidInputError(
+            "A senha deve ter no máximo 50 caracteres."
+        );
 
-    // Update password for user with this email
+    // Validar jwt e extrair email
+    let decodedToken, email;
+    try {
+        decodedToken = jwt.verify(token, process.env.RESET_PASSWORD_JWT_SECRET);
+        email = decodedToken.email;
+    } catch (err) {
+        throw new ExpiredError(
+            "Esse link para redefinir senha expirou ou é inválido. Solicite outro."
+        );
+    }
+
+    // Atualizar senha do usuário com o email fornecido
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     await User.updateOne({ email }, { password: hashedPassword });
 
