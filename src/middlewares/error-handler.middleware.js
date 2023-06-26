@@ -23,7 +23,7 @@ exports.errorHandler = (err, req, res, next) => {
     }
 
     // Default para erros não customizados ou não previstos
-    res.status(400).send({
+    res.status(500).send({
         error: {
             type: "default",
             message: "Alguma coisa deu errado.",
