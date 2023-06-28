@@ -5,6 +5,7 @@ const usageSchema = new mongoose.Schema(
         userId: { type: String, required: true },
         type: { type: String, required: true },
         model: { type: String, required: true },
+        cost: { type: Number, required: true },
         promptTokens: { type: Number, required: false },
         completionTokens: { type: Number, required: false },
         totalTokens: { type: Number, required: false },

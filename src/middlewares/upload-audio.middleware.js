@@ -13,5 +13,5 @@ const storage = multer.diskStorage({
 
 exports.uploadAudio = multer({
     storage: storage,
-    limits: { fileSize: 70000000 }, // Limitar áudios até 70MB
+    limits: { fileSize: 10 * 1000 * 1000 }, // Limitar áudios até 10MB
 }).single("file");
