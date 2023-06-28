@@ -2,6 +2,10 @@ const { SYSTEM_PROMPT } = require("../utils/constants");
 const OpenAI = require("../models/openai.model");
 const Usage = require("../models/usage.model");
 const { InvalidInputError } = require("../errors/InvalidInputError.error");
+const { UsageLimitError } = require("../errors/UsageLimitError.errors");
+const {
+    hasReachedMonthlyCostLimit,
+} = require("../utils/functions/hasReachedMonthlyCostLimit");
 
 exports.chat = async (req, res, next) => {
     const { userId } = req.headers;
@@ -13,7 +17,9 @@ exports.chat = async (req, res, next) => {
             "Você passou do limite de mensagens para uma requisição."
         );
 
-    // Checar custo atual do usuário
+    // Checar se o usuário ultrapassou o limite mensal de uso
+    const hasReachedLimit = await hasReachedMonthlyCostLimit(userId);
+    if (hasReachedLimit) throw new UsageLimitError();
 
     // Chat
     messages.unshift({ role: "system", content: SYSTEM_PROMPT });

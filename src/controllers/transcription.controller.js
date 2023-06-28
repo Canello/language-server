@@ -1,9 +1,12 @@
 const fs = require("fs");
 const path = require("path");
-
 const OpenAI = require("../models/openai.model");
 const Usage = require("../models/usage.model");
-const User = require("../models/user.model");
+const { InvalidInputError } = require("../errors/InvalidInputError.error");
+const { UsageLimitError } = require("../errors/UsageLimitError.errors");
+const {
+    hasReachedMonthlyCostLimit,
+} = require("../utils/functions/hasReachedMonthlyCostLimit");
 
 exports.transcription = async (req, res, next) => {
     const { userId } = req.headers;
@@ -11,11 +14,15 @@ exports.transcription = async (req, res, next) => {
 
     const filepath = path.join(__dirname, "..", "uploads", filename);
 
+    // Checar se o usuário ultrapassou o limite mensal de uso
+    const hasReachedLimit = await hasReachedMonthlyCostLimit(userId);
+    if (hasReachedLimit) throw new UsageLimitError();
+
     // Evitar áudios com mais de 5min
     const SECONDS_PER_SIZE = 60 / 10 ** 6; // Assumindo que um minuto de áudio tem 1 MB
     const durationInSeconds = SECONDS_PER_SIZE * size;
     if (durationInSeconds > 300)
-        throw new Error("O áudio deve ser menor que 5 minutos.");
+        throw new InvalidInputError("O áudio deve ser menor que 5 minutos.");
 
     // Trackear uso por duração do áudio
     const DOLLARS_PER_SECOND = 0.006 / 60;
@@ -27,10 +34,7 @@ exports.transcription = async (req, res, next) => {
         model: process.env.TRANSCRIPTION_MODEL,
         durationInSeconds,
     });
-    usage.save();
-
-    // Checar custo atual do usuário
-    // const { subscribedAt } = await User.findById(userId);
+    await usage.save();
 
     // Transcription
     const file = fs.readFileSync(filepath);
