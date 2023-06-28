@@ -6,13 +6,13 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         freeTrials: { type: Number, default: 7 },
-        expirationDate: { type: Date, default: Date.now },
+        expiresAt: { type: Date, default: Date.now },
     },
     {
         timestamps: true,
         toJSON: {
             transform(doc, ret) {
-                ret.isActive = new Date(ret.expirationDate) > new Date();
+                ret.isActive = new Date(ret.expiresAt) > new Date();
                 delete ret.password;
                 delete ret.__v;
             },
@@ -20,7 +20,14 @@ const userSchema = new mongoose.Schema(
         virtuals: {
             isActive: {
                 get() {
-                    return new Date(this.expirationDate) > new Date();
+                    return new Date(this.expiresAt) > new Date();
+                },
+            },
+            subscribedAt: {
+                get() {
+                    let subscribedAt = new Date(this.expiresAt);
+                    subscribedAt.setMonth(subscribedAt.getMonth() - 1);
+                    return subscribedAt;
                 },
             },
         },

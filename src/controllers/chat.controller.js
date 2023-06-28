@@ -13,6 +13,8 @@ exports.chat = async (req, res, next) => {
             "Você passou do limite de mensagens para uma requisição."
         );
 
+    // Checar custo atual do usuário
+
     // Chat
     messages.unshift({ role: "system", content: SYSTEM_PROMPT });
     const { reply, promptTokens, completionTokens, totalTokens } =
@@ -35,8 +37,6 @@ exports.chat = async (req, res, next) => {
         totalTokens,
     });
     usage.save();
-
-    // Checar se o usuário passou do limite de uso desde o pagamento
 
     res.send({
         data: { reply },

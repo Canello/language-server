@@ -32,11 +32,11 @@ exports.mercadopagoWebhook = async (req, res, next) => {
             await MercadoPago.refund(id);
         } else {
             // Liberar 1 mês de acesso para o usuário
-            const expirationDate = new Date();
-            expirationDate.setMonth(expirationDate.getMonth() + 1);
+            const expiresAt = new Date();
+            expiresAt.setMonth(expiresAt.getMonth() + 1);
             await User.updateOne(
                 { _id: payment.metadata.user_id },
-                { expirationDate }
+                { expiresAt }
             );
         }
     }

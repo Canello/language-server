@@ -3,6 +3,7 @@ const path = require("path");
 
 const OpenAI = require("../models/openai.model");
 const Usage = require("../models/usage.model");
+const User = require("../models/user.model");
 
 exports.transcription = async (req, res, next) => {
     const { userId } = req.headers;
@@ -27,6 +28,9 @@ exports.transcription = async (req, res, next) => {
         durationInSeconds,
     });
     usage.save();
+
+    // Checar custo atual do usuário
+    // const { subscribedAt } = await User.findById(userId);
 
     // Transcription
     const file = fs.readFileSync(filepath);
