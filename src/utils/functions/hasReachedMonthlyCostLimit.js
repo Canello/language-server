@@ -19,8 +19,6 @@ exports.hasReachedMonthlyCostLimit = async (userId) => {
         },
     ]);
 
-    console.log(monthlyCostQueryResult);
-
     if (monthlyCostQueryResult.length > 0) {
         const monthlyCost = monthlyCostQueryResult[0].sum;
 
