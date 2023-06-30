@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
         fullName: { type: String, required: true },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        freeTrials: { type: Number, default: 7 },
+        freeTrials: { type: Number, default: 20 },
         expiresAt: { type: Date, default: Date.now },
     },
     {
