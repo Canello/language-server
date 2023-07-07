@@ -1,4 +1,4 @@
-const { SYSTEM_PROMPT } = require("../utils/constants");
+const { SYSTEM_PROMPT, userPrompt } = require("../utils/constants");
 const OpenAI = require("../models/openai.model");
 const Usage = require("../models/usage.model");
 const { InvalidInputError } = require("../errors/InvalidInputError.error");
@@ -23,6 +23,8 @@ exports.chat = async (req, res, next) => {
 
     // Chat
     messages.unshift({ role: "system", content: SYSTEM_PROMPT });
+    const lastUserMessage = messages[messages.length - 1];
+    lastUserMessage.content = userPrompt(lastUserMessage.content);
     const { reply, promptTokens, completionTokens, totalTokens } =
         await OpenAI.chat(messages);
 

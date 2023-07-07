@@ -1,10 +1,13 @@
 const axios = require("axios");
+const { TRANSCRIPTION_PROMPT } = require("../utils/constants");
 
 class OpenAI {
-    static async transcript(filename, file) {
+    static async transcript(filename, file, temperature = 0) {
         const formData = new FormData();
         formData.append("file", new Blob([file]), filename);
         formData.append("model", process.env.TRANSCRIPTION_MODEL);
+        formData.append("temperature", temperature);
+        formData.append("prompt", TRANSCRIPTION_PROMPT);
 
         const response = await axios.post(
             "https://api.openai.com/v1/audio/transcriptions",
@@ -21,12 +24,13 @@ class OpenAI {
         return transcription;
     }
 
-    static async chat(messages) {
+    static async chat(messages, temperature = 0) {
         const response = await axios.post(
             "https://api.openai.com/v1/chat/completions",
             {
                 model: process.env.CHAT_MODEL,
                 messages,
+                temperature,
             },
             {
                 headers: {
