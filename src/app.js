@@ -8,22 +8,13 @@ const { transcription } = require("./controllers/transcription.controller");
 const { uploadAudio } = require("./middlewares/upload-audio.middleware");
 const { errorHandler } = require("./middlewares/error-handler.middleware");
 const { chat } = require("./controllers/chat.controller");
-const {
-    loginWithGoogle,
-    signin,
-    signup,
-    getUser,
-    getPasswordResetLink,
-    changePassword,
-} = require("./controllers/auth.controller");
 const { auth } = require("./middlewares/auth.middleware");
 const {
     checkSubscription,
 } = require("./middlewares/check-subscription.middleware");
-const {
-    mercadopagoWebhook,
-    createPreference,
-} = require("./controllers/mercado-pago.controller");
+
+const authRouter = require("./routes/auth.route");
+const mercadoPagoRouter = require("./routes/mercado-pago.route");
 
 const app = express();
 
@@ -32,14 +23,8 @@ app.use(cors());
 
 app.post("/transcription", auth, checkSubscription, uploadAudio, transcription);
 app.post("/chat", auth, checkSubscription, chat);
-// app.post("/auth/google", loginWithGoogle);
-app.post("/auth/signin", signin);
-app.post("/auth/signup", signup);
-app.get("/auth/user", auth, getUser);
-app.post("/auth/reset-link", getPasswordResetLink);
-app.post("/auth/change-password", changePassword);
-app.post("/mercado-pago/preferences", auth, createPreference);
-app.post("/mercado-pago/webhooks", mercadopagoWebhook);
+app.use("/auth", authRouter);
+app.use("/mercado-pago", mercadoPagoRouter);
 
 app.use(errorHandler);
 
