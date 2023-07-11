@@ -1,8 +1,10 @@
 const express = require("express");
 const {
     createPreference,
+} = require("../controllers/mercado-pago/create-preference.controller");
+const {
     mercadopagoWebhook,
-} = require("../controllers/mercado-pago.controller");
+} = require("../controllers/mercado-pago/mercadopago-webhook.controller");
 const { auth } = require("../middlewares/auth.middleware");
 
 const router = express.Router();

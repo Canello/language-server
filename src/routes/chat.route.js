@@ -1,5 +1,5 @@
 const express = require("express");
-const { chat } = require("../controllers/chat.controller");
+const { chat } = require("../controllers/chat/chat.controller");
 const { auth } = require("../middlewares/auth.middleware");
 const {
     checkSubscription,

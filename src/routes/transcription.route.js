@@ -1,5 +1,7 @@
 const express = require("express");
-const { transcription } = require("../controllers/transcription.controller");
+const {
+    transcription,
+} = require("../controllers/transcription/transcription.controller");
 const { auth } = require("../middlewares/auth.middleware");
 const {
     checkSubscription,

@@ -1,11 +1,11 @@
-const { SYSTEM_PROMPT, userPrompt } = require("../utils/constants");
-const OpenAI = require("../models/openai.model");
-const Usage = require("../models/usage.model");
-const { InvalidInputError } = require("../errors/InvalidInputError.error");
-const { UsageLimitError } = require("../errors/UsageLimitError.errors");
+const { SYSTEM_PROMPT, userPrompt } = require("../../utils/constants");
+const OpenAI = require("../../models/openai.model");
+const Usage = require("../../models/usage.model");
+const { InvalidInputError } = require("../../errors/InvalidInputError.error");
+const { UsageLimitError } = require("../../errors/UsageLimitError.errors");
 const {
     hasReachedMonthlyCostLimit,
-} = require("../utils/functions/hasReachedMonthlyCostLimit");
+} = require("../../utils/functions/hasReachedMonthlyCostLimit");
 
 exports.chat = async (req, res, next) => {
     const { userId } = req.headers;
