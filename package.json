@@ -8,6 +8,11 @@
         "dev": "nodemon ./src/index.js",
         "test": "jest --watchAll --no-cache"
     },
+    "jest": {
+        "setupFilesAfterEnv": [
+            "./src/test/setup.js"
+        ]
+    },
     "keywords": [],
     "author": "",
     "license": "ISC",
