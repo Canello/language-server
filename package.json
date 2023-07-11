@@ -11,7 +11,8 @@
     "jest": {
         "setupFilesAfterEnv": [
             "./src/test/setup.js"
-        ]
+        ],
+        "restoreMocks": true
     },
     "keywords": [],
     "author": "",

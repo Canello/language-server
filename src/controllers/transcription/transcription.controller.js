@@ -41,9 +41,14 @@ exports.transcription = async (req, res, next) => {
     const transcription = await OpenAI.transcript(filename, file);
 
     // Excluir audio file temporária
-    fs.unlink(filepath, (err) => {
-        if (err) console.log(err);
-    });
+    try {
+        await fs.promises.unlink(
+            path.join(__dirname, "..", "..", "uploads", filename)
+        );
+    } catch (err) {
+        console.log("Erro ao excluir arquivo de áudio.");
+        console.log(err);
+    }
 
     res.json({
         data: { transcription },
