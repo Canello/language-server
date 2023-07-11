@@ -10,7 +10,7 @@ const { auth } = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
-// app.post("/auth/google", loginWithGoogle);
+// router.post("/auth/google", loginWithGoogle);
 router.post("/signin", signin);
 router.post("/signup", signup);
 router.get("/user", auth, getUser);
