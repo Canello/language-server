@@ -55,7 +55,7 @@ describe("error-handler.middleware", () => {
 
     it("responds with a custom error response if an instance of CustomError is received", async () => {
         const err = new NotFoundError();
-        const spyRes = jest.spyOn(res, "send");
+        const spySend = jest.spyOn(res, "send");
         const expectedRes = {
             error: {
                 type: "not_found",
@@ -65,6 +65,6 @@ describe("error-handler.middleware", () => {
 
         await errorHandler(err, req, res);
 
-        expect(spyRes).toHaveReturnedWith(expectedRes);
+        expect(spySend).toHaveReturnedWith(expectedRes);
     });
 });
