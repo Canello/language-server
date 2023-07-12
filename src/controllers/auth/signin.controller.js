@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../../models/user.model");
-const { InvalidInputError } = require("../../errors/InvalidInputError.error");
+const { InvalidInputError } = require("../../errors/invalid-input-error.error");
 
 exports.signin = async (req, res, next) => {
     const { email, password } = req.body;

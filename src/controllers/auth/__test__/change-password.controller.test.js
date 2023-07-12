@@ -1,8 +1,8 @@
 const { changePassword } = require("../change-password.controller");
-const { ExpiredError } = require("../../../errors/ExpiredError.error");
+const { ExpiredError } = require("../../../errors/expired-error.error");
 const {
     InvalidInputError,
-} = require("../../../errors/InvalidInputError.error");
+} = require("../../../errors/invalid-input-error.error");
 const User = require("../../../models/user.model");
 
 jest.mock("../../../models/user.model");

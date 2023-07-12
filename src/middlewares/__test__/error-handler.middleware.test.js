@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { errorHandler } = require("../error-handler.middleware");
-const { NotFoundError } = require("../../errors/NotFoundError.error");
+const { NotFoundError } = require("../../errors/not-found-error.error");
 
 describe("error-handler.middleware", () => {
     const err = new Error();

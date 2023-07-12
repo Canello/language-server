@@ -1,8 +1,8 @@
 const { SYSTEM_PROMPT, userPrompt } = require("../../utils/constants");
 const OpenAI = require("../../models/openai.model");
 const Usage = require("../../models/usage.model");
-const { InvalidInputError } = require("../../errors/InvalidInputError.error");
-const { UsageLimitError } = require("../../errors/UsageLimitError.errors");
+const { InvalidInputError } = require("../../errors/invalid-input-error.error");
+const { UsageLimitError } = require("../../errors/usage-limit-error.errors");
 const {
     hasReachedMonthlyCostLimit,
 } = require("../../utils/functions/hasReachedMonthlyCostLimit");

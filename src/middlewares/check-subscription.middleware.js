@@ -1,4 +1,4 @@
-const { NoCreditsError } = require("../errors/NoCreditsError.error");
+const { NoCreditsError } = require("../errors/no-credits-error.error");
 const User = require("../models/user.model");
 
 exports.checkSubscription = async (req, res, next) => {

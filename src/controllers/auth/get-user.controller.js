@@ -1,5 +1,5 @@
 const User = require("../../models/user.model");
-const { NotFoundError } = require("../../errors/NotFoundError.error");
+const { NotFoundError } = require("../../errors/not-found-error.error");
 
 exports.getUser = async (req, res, next) => {
     const { userId } = req.headers;

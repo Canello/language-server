@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../../models/user.model");
-const { InvalidInputError } = require("../../errors/InvalidInputError.error");
-const { ExpiredError } = require("../../errors/ExpiredError.error");
+const { InvalidInputError } = require("../../errors/invalid-input-error.error");
+const { ExpiredError } = require("../../errors/expired-error.error");
 
 exports.changePassword = async (req, res, next) => {
     const { newPassword, token } = req.body;
