@@ -88,7 +88,7 @@ describe("change-password.controller", () => {
         expect(User.updateOne).toHaveBeenCalledTimes(1);
     });
 
-    it("reponds properly if jwt and password are both ok", async () => {
+    it("responds properly if jwt and password are both ok", async () => {
         const req = {
             body: {
                 newPassword: "something",
