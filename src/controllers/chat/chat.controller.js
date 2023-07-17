@@ -1,4 +1,3 @@
-const { SYSTEM_PROMPT, userPrompt } = require("../../utils/constants");
 const OpenAI = require("../../models/openai.model");
 const Usage = require("../../models/usage.model");
 const { InvalidInputError } = require("../../errors/invalid-input-error.error");
@@ -6,6 +5,7 @@ const { UsageLimitError } = require("../../errors/usage-limit-error.errors");
 const {
     hasReachedMonthlyCostLimit,
 } = require("../../utils/functions/hasReachedMonthlyCostLimit");
+const { MessagesProcessor } = require("../../utils/classes/MessagesProcessor");
 
 exports.chat = async (req, res, next) => {
     const { userId } = req.headers;
@@ -22,9 +22,7 @@ exports.chat = async (req, res, next) => {
     if (hasReachedLimit) throw new UsageLimitError();
 
     // Chat
-    messages.unshift({ role: "system", content: SYSTEM_PROMPT });
-    const lastUserMessage = messages[messages.length - 1];
-    lastUserMessage.content = userPrompt(lastUserMessage.content);
+    MessagesProcessor.process(messages);
     const { reply, promptTokens, completionTokens, totalTokens } =
         await OpenAI.chat(messages);
 
