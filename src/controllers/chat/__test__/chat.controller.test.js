@@ -79,10 +79,12 @@ describe("chat.controller", () => {
     });
 
     it("should call OpenAI API and track usage", async () => {
+        const spyChat = jest.spyOn(OpenAI, "chat");
         const spySave = jest.spyOn(Usage.prototype, "save");
 
         await chat(req, res);
 
         expect(spySave).toHaveBeenCalledTimes(1);
+        expect(spyChat).toHaveBeenCalledTimes(1);
     });
 });
