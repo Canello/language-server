@@ -9,7 +9,6 @@ const {
 const OpenAI = require("../../../models/openai.model");
 const Usage = require("../../../models/usage.model");
 
-jest.mock("../../../models/usage.model");
 jest.mock("../../../utils/functions/hasReachedMonthlyCostLimit");
 jest.mock("../../../models/openai.model", () => {
     return {

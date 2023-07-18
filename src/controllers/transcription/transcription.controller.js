@@ -42,15 +42,13 @@ exports.transcription = async (req, res, next) => {
 
     // Excluir audio file temporária
     try {
-        await fs.promises.unlink(
-            path.join(__dirname, "..", "..", "uploads", filename)
-        );
+        await fs.promises.unlink(filepath);
     } catch (err) {
         console.log("Erro ao excluir arquivo de áudio.");
         console.log(err);
     }
 
-    res.json({
+    res.send({
         data: { transcription },
     });
 };
