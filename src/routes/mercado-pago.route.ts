@@ -5,7 +5,7 @@ import { auth } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
-router.post("/mercado-pago/preferences", auth, createPreference);
-router.post("/mercado-pago/webhooks", mercadopagoWebhook);
+router.post("/preferences", auth, createPreference);
+router.post("/webhooks", mercadopagoWebhook);
 
 export default router;
