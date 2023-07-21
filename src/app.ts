@@ -12,6 +12,9 @@ export const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Endpoint teste
+app.get("/", (req, res, next) => res.status(200).send("Fine"));
+
 app.use("/transcription", transcriptionRouter);
 app.use("/chat", chatRouter);
 app.use("/auth", authRouter);
