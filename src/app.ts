@@ -1,19 +1,18 @@
 import express from "express";
+// express-async-errors precisa sem importado aqui em cima, antes das rotas serem importadas (e, consequentemente, definidas).
+// Caso contrário, ele não pega erros dentro delas.
+import "express-async-errors";
 import cors from "cors";
 import transcriptionRouter from "./routes/transcription.route";
 import chatRouter from "./routes/chat.route";
 import authRouter from "./routes/auth.route";
 import mercadoPagoRouter from "./routes/mercado-pago.route";
 import { errorHandler } from "./middlewares/error-handler.middleware";
-require("express-async-errors");
 
 export const app = express();
 
 app.use(express.json());
 app.use(cors());
-
-// Endpoint teste
-app.get("/", (req, res, next) => res.status(200).send("Fine"));
 
 app.use("/transcription", transcriptionRouter);
 app.use("/chat", chatRouter);
