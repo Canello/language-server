@@ -1,7 +1,7 @@
-import express from "express";
 // express-async-errors precisa sem importado aqui em cima, antes das rotas serem importadas (e, consequentemente, definidas).
 // Caso contrário, ele não pega erros dentro delas.
 import "express-async-errors";
+import express from "express";
 import cors from "cors";
 import transcriptionRouter from "./routes/transcription.route";
 import chatRouter from "./routes/chat.route";
