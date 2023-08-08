@@ -1,4 +1,4 @@
-// express-async-errors precisa sem importado aqui em cima, antes das rotas serem importadas (e, consequentemente, definidas).
+// express-async-errors precisa ser importado aqui em cima, antes das rotas serem importadas (e, consequentemente, definidas).
 // Caso contrário, ele não pega erros dentro delas.
 import "express-async-errors";
 import express from "express";
