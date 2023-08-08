@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
+import { config } from "dotenv";
+
+config({ path: "test.env" });
 
 let mongo: any;
 
