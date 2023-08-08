@@ -1,6 +1,5 @@
 import request from "supertest";
 import { app } from "../../../app";
-import MercadoPago from "../../../models/marcado-pago.model";
 
 jest.mock("../../../models/marcado-pago.model", () => {
     return {
