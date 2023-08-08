@@ -22,7 +22,7 @@ export const signin = async (
     // Gerar JWT para autenticação de usuário
     const userToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!);
 
-    res.send({
+    res.status(200).send({
         data: { token: userToken, user },
     });
 };
