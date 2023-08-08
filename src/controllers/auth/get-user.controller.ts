@@ -12,7 +12,7 @@ export const getUser = async (
     const user = await User.findById(userId)!;
     if (!user) throw new NotFoundError("Usuário não encontrado.");
 
-    res.send({
+    res.status(200).send({
         data: { user },
     });
 };
