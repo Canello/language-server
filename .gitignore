@@ -2,3 +2,5 @@ node_modules
 dist
 *.env
 *.wav
+!test-record.wav
+!very-long-test-record.wav

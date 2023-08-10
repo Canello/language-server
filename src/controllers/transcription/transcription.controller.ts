@@ -58,7 +58,7 @@ export const transcription = async (
         console.log(err);
     }
 
-    res.send({
+    res.status(200).send({
         data: { transcription },
     });
 };
